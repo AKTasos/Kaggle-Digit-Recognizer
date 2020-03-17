@@ -57,7 +57,7 @@ class RunManager():
         self.loader = None
         self.tb = None
         
-    def begin_run
+
         
 class mnist(Dataset):
     
