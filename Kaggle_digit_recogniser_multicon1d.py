@@ -32,8 +32,8 @@ param_values = [v for v in parameters.values()]
 
 
 def correct(preds, labels):
-    v=torch.eq(preds.argmax(dim=1),labels,out=torch.tensor([]))
-    return v.sum().item()
+    c=torch.eq(preds.argmax(dim=1),labels,out=torch.tensor([]))
+    return c.sum().item()
 
 class mnist(Dataset):
     
@@ -111,7 +111,7 @@ dataset= mnist()
 
 #Mutliple runs with multiples parameters
 for lr, batch_size, shuffle in product(*param_values):
-    comment = f' batch_size={batch_size}, lr={lr}'
+    
         
     # initialize NN    
     network = Network()    
@@ -119,7 +119,7 @@ for lr, batch_size, shuffle in product(*param_values):
     optimizer = optim.SGD(network.parameters(), lr=lr)
     
     
-    
+    comment = f' batch_size={batch_size}, lr={lr}'
     tensorb = SummaryWriter(comment=comment)
     # tensorb.add_image("images", grid)
     # tensorb.add_graph(network, images.float())
