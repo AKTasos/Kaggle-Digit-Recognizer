@@ -5,11 +5,11 @@ Created on Wed Mar 11 17:16:20 2020
 
 @author: aktasos
 """
+import torch
 import time
 from collections import namedtuple
 from itertools import product
 from torch.utils.tensorboard import SummaryWriter
-import torchvision
 import pandas as pd
 from analytics import correct
 import json
@@ -61,6 +61,8 @@ class Run():
     def end_run(self):
         self.tb.close()
         self.epoch_count = 0
+        PATH = f'./trained_models/{self.run_params}.pth'
+        torch.save(self.network.state_dict(), PATH)
     
 class Epochs(Run):
     
