@@ -14,31 +14,31 @@ class Network(nn.Module):
         # super function. It inherits from nn.Module and we can access everythink in nn.Module
         super(Network,self).__init__()
         # Function.
-        self.conv1d_1 = nn.Conv1d(in_channels=1, out_channels=3, kernel_size=7 )
-        self.conv1d_2 = nn.Conv1d(in_channels=3, out_channels=9, kernel_size=7 )
-        self.conv1d_3 = nn.Conv1d(in_channels=9, out_channels=27, kernel_size=7 )
-        self.fc1 = nn.Linear(in_features=27*766, out_features=784)
+        self.conv2d_1 = nn.Conv2d(in_channels=1, out_channels=3, kernel_size=4 )
+        self.conv2d_2 = nn.Conv2d(in_channels=3, out_channels=9, kernel_size=4 )
+        self.conv2d_3 = nn.Conv2d(in_channels=9, out_channels=27, kernel_size=4 )
+        self.fc1 = nn.Linear(in_features=27*361, out_features=784)
         self.fc2 = nn.Linear(in_features=784, out_features=784)
         self.out = nn.Linear(in_features=784, out_features=10)
 
     def forward(self,x):
         
         # 1 hidden layer
-        x = self.conv1d_1(x)
+        x = self.conv2d_1(x)
         x = F.relu(x)
     
         # 2 hidden layer
-        x = self.conv1d_2(x)
+        x = self.conv2d_2(x)
         x = F.relu(x)
         
         # 3 hidden layer
-        x = self.conv1d_3(x)
+        x = self.conv2d_3(x)
         x = F.relu(x)
         
         # 4 hidden layer
-       
+        # print(x.shape)
         x = x.view(x.size(0), -1)
-        
+        # print(x.shape)
         x = self.fc1(x)
         x = F.relu(x)
         
