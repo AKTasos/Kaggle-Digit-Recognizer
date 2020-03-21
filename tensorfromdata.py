@@ -26,7 +26,7 @@ class TensorDataset(Dataset):
             self.y = torch.from_numpy(data.label.values)
         except :
             self.y = None
-        self.x = torch.from_numpy(data.loc[:,data.columns != "label"].values).unsqueeze(1).view(data.shape[0], 1, 28, 28)
+        self.x = torch.from_numpy(data.loc[:,data.columns != "label"].values).unsqueeze(1)
         self.n_samples=data.shape[0]
         
     def __getitem__(self, index):
