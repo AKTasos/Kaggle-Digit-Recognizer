@@ -29,7 +29,7 @@ parameters = dict(
     ,shuffle = [False]
     ,epochs = [20]
     ,nb_of_layers = [x for x in range(4, 20, 4)]
-    ,act_fonction=["Relu"])
+    ,act_fonction=["relu"])
 
 r = Run()
 runs = r.run_parameters(parameters)
