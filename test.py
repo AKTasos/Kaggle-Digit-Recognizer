@@ -1,76 +1,86 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Mar 12 15:05:43 2020
+Created on Sun Feb  9 14:59:22 2020
 
 @author: aktasos
 """
-import torch.nn as nn
-import torch.nn.functional as F
 
-n_in = 784
-output = 10
-nb_of_layers = 10
-act_fonction="Relu"
+import numpy as np
+import pandas as pd
+import os
+import torch
+import torch.nn as nn 
+import torch.nn.functional as F 
+from torch.utils.data import Dataset, DataLoader
+import torchvision
+import torchvision.transforms as transforms
+import matplotlib.pyplot as plt
 
-class FcLayers():
+os.path.dirname(os.path.abspath(__file__)) 
+print(os.listdir("input"))
+
+
+
+
+class mnist(Dataset) :
     
-    def __init__(self, n_in, output, nb_of_layers, act_fonction):
+    def __init__(self):
+        train = pd.read_csv("input/train.csv")
+        # train = np.loadtxt("./input/train.csv", delimiter=',', dtype=np.float32, skiprows=1)
+        self.y = torch.from_numpy(train.label.values)
+        self.x = torch.from_numpy(train.loc[:,train.columns != "label"].values).unsqueeze(1)
+        self.n_samples=train.shape[0]
         
-        self.n_layer = 1
-        self.name = (f'fc{self.n_layer}')
-        self.in_features = n_in
-        self.n_delta = n_in // nb_of_layers
-        self.out_features = n_in-self.n_delta
-        self.output = output
-        self.nb_of_layers = nb_of_layers
-        self.layer_list = []
-        self.act_fonction="Relu"
-        
-    def next_layer_parameters(self):
-        
-        self.n_layer += 1
-        self.name = (f'fc{self.n_layer}')
-        self.in_features = self.out_features
-        self.out_features -= self.n_delta
-        
-        
-    def layer_creation(self):
-        for i in range(self.nb_of_layers):
-            if i == self.nb_of_layers-1 :
-                self.name = "out"
-                self.out_features = self.output
-            self.layer_list.append((self.name, self.in_features, self.out_features))
-            self.next_layer_parameters()
-            
-            
-    def network_creator(self):
-        
-        text_layer = str()
-        text_forward =str()
-        l=1
-        
-        for name, in_feat, out_feat in a.layer_list :
-            
-            text_layer =text_layer + f'self.{name} = nn.Linear(in_features= {in_feat}, out_features={out_feat}\n'
-            text_forward = text_forward + f'#layer {l} \nx=self.{name}(x) \nx=F.{self.act_fonction(x)}\n\n'
-            # layer_list.append(f'self.{name} = nn.Linear(in_features= {in_feat}, out_features={out_feat}')
-            # text_layer = '\n'.join(layer_list)
-            l += 1
-        
-        
+    def __getitem__(self, index):
+        return self.x[index], self.y[index]
     
-        file = open("network_fc_template", "r")
-        text = file.read()
-        text.replace('layer_line', text_layer)
-        file = open(f"Network_{self.nb_of_layers}layers.py", "w")
-        file.write(first)
-        file.write(first)
-        file.write(first)
-        
+    def __len__(self):
+        return self.n_samples
     
     
-    
+# create class
+class Network(nn.Module):
+    def __init__(self):
+        # super function. It inherits from nn.Module and we can access everythink in nn.Module
+        super(Network,self).__init__()
+        # Function.
         
- a=fc_layers(n_in, output, nb_of_layers)
-a.layer_creation()
+        self.fc1 = nn.Linear(in_features= 1*784, out_features=588)
+        self.fc2 = nn.Linear(in_features= 588, out_features=392)
+        self.fc3 = nn.Linear(in_features= 392, out_features=196)
+        self.out = nn.Linear(in_features= 196, out_features=10)
+        
+
+    def forward(self,x):
+        
+        #layer 1 
+        x = self.fc1(x) 
+        x = F.relu(x)
+        print(x)
+        #layer 2 
+        x = self.fc2(x) 
+        x = F.relu(x)
+        print(x)
+        #layer 3 
+        x = self.fc3(x) 
+        x = F.relu(x)
+        print(x)
+        #layer 4 
+        x = self.out(x) 
+        x = F.relu(x)
+        print(x)
+        
+        x = F.softmax(x, dim=1)
+        print(x)
+        return x
+    
+network = Network()
+dataset= mnist()
+data_loader = DataLoader(dataset=dataset,batch_size=10,shuffle=True)
+i = iter(dataset)
+# fig, axs = plt.subplots(10)
+batch = next(iter(data_loader))
+images, labels = batch
+pred=network(images.float())
+pred.argmax(dim=1)

@@ -19,8 +19,8 @@ os.path.dirname(os.path.abspath(__file__))
 
 n_in = 784
 output = 10
-nb_of_layers = 10
-act_fonction="relu"
+
+
 
 #parameters = dictionary of parameters for DataLoader and optim (dataset, batch_size, shuffle, sampler, batch_sampler, num_workers, collate_fn, pin_memory, drop_last, timeout, worker_init_fn)
 parameters = dict(
@@ -29,7 +29,7 @@ parameters = dict(
     ,shuffle = [False]
     ,epochs = [20]
     ,nb_of_layers = [x for x in range(4, 20, 4)]
-    ,act_fonction=["relu"])
+    ,act_fonction=["relu","glu","tanh","sigmoid","softmax"])
 
 r = Run()
 runs = r.run_parameters(parameters)
@@ -40,7 +40,7 @@ train_set = TensorDataset(data_path)
 
 
 for run in runs:
-    
+    print(run)
     layers = FcLayers(n_in, output, run.nb_of_layers, run.act_fonction)
     layers.layer_creation()
     layers.network_creator()
