@@ -20,5 +20,6 @@ class Network(nn.Module):
     def forward(self,x):
         
         forward_line
-        x = F.softmax(x, dim=1)
-        return x
+        
+        
+        return x.view(1000,10)

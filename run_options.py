@@ -95,9 +95,9 @@ class Epochs(Run):
         r.tb.add_scalar('Loss', loss, self.epoch_count)
         r.tb.add_scalar('Accuracy', accuracy, self.epoch_count)
     
-        for name, param in r.network.named_parameters():
-            r.tb.add_histogram(name, param, self.epoch_count)
-            r.tb.add_histogram(f'{name}.grad', param.grad, self.epoch_count)
+        # for name, param in r.network.named_parameters():
+        #     r.tb.add_histogram(name, param, self.epoch_count)
+        #     r.tb.add_histogram(f'{name}.grad', param.grad, self.epoch_count)
             
         results = dict()
         results["run"] = r.run_count
