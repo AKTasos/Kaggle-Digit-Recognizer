@@ -11,14 +11,15 @@ import os
 from tensorfromdata import TensorDataset
 
 from torch.utils.data import DataLoader
-from run_options import Run, Epochs, FcLayers
+from run_options import Run, Epochs
 import torch.optim as optim
 import torch.nn.functional as F
+from networkconv import FullConNetwork
 
 os.path.dirname(os.path.abspath(__file__))
 
-n_in = 784
-output = 10
+
+out_feat = 10
 
 
 
@@ -28,8 +29,9 @@ parameters = dict(
     ,batch_size = [1000]
     ,shuffle = [False]
     ,epochs = [20]
-    ,nb_of_layers = [x for x in range(4, 20, 4)]
-    ,act_fonction=["relu","glu","tanh","sigmoid","softmax"])
+    ,nb_of_fclayers = [x for x in range(4, 20, 4)]
+    # ,act_fonction=["relu","glu","tanh","sigmoid","softmax"]
+    ,kernel_size = [2, 4])
 
 r = Run()
 runs = r.run_parameters(parameters)
@@ -41,30 +43,28 @@ train_set = TensorDataset(data_path)
 
 for run in runs:
     print(run)
-    layers = FcLayers(n_in, output, run.nb_of_layers, run.act_fonction)
-    layers.layer_creation()
-    layers.network_creator()
-    
-    from networkfc import Network
-    network = Network()
-   
+  
     data_loader = DataLoader(dataset=train_set, batch_size=run.batch_size, shuffle=run.shuffle)
-    optimizer = optim.SGD(network.parameters(), lr=run.lr)
+    batch = next(iter(data_loader))
+    images, labels = batch
     
-    r.run_begin(run, network, data_loader)
+    cnnfc = FullConNetwork(images, run.kernel_size, run.nb_of_fclayers, out_feat)
+    
+    optimizer = optim.SGD(cnnfc.parameters(), lr=run.lr)
+    
+    r.run_begin(run, cnnfc, data_loader)
    
     e = Epochs()
     for epoch in range(run.epochs):
-        
-       
+          
         e.start_epoch()
         
         for batch in data_loader :
             
             images, labels = batch
             
-            #runs the batch in the NN
-            preds=network(images.float())
+            #runs the batch in the CNN
+            preds=cnnfc(images.float())
             
             
             #calculate Loss
