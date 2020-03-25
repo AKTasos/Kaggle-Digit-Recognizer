@@ -27,7 +27,7 @@ class FullConNetwork(nn.Module):
         # Function.
     # determine number of convolution according to size of image
         self.nb_of_conv = int(math.log(self.img_size)/math.log(2))
-        
+        print(self.nb_of_conv)
     # creating layers
         
         self.cnn = []
@@ -42,6 +42,7 @@ class FullConNetwork(nn.Module):
         
         self.cnn = nn.Sequential(*self.cnn)
         
+        self.layer_output = int(self.layer_output ** 2 * (self.new_feat_map/2))
         self.n_delta = self.layer_output // nb_of_fclayers
         self.out_features = self.layer_output - self.n_delta
         
@@ -59,8 +60,9 @@ class FullConNetwork(nn.Module):
 
 
 
-    def forward(self,inputs):
-        inputs = self.cnn(inputs)
-        inputs = self.fc(inputs)
-        return 
+    def forward(self,x):
+        x = self.cnn(x)
+        x = x.view(x.size(0), -1)
+        x = self.fc(x)
+        return x
     

@@ -8,7 +8,7 @@ Created on Thu Mar 12 16:38:10 2020
 import torch
 
 def correct(preds, labels):
-    c=torch.eq(preds.argmax(dim=1),labels,out=torch.tensor([]))
+    c=torch.eq(preds.argmax(dim=1),labels)
     return c.sum().item()
 
 def get_all_preds(model, loader):

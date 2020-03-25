@@ -26,19 +26,18 @@ out_feat = 10
 #parameters = dictionary of parameters for DataLoader and optim (dataset, batch_size, shuffle, sampler, batch_sampler, num_workers, collate_fn, pin_memory, drop_last, timeout, worker_init_fn)
 parameters = dict(
     lr = [0.01]
-    ,batch_size = [1000]
+    ,batch_size = [10]
     ,shuffle = [False]
     ,epochs = [20]
-    ,nb_of_fclayers = [x for x in range(4, 20, 4)]
+    ,nb_of_fclayers = [2]
     # ,act_fonction=["relu","glu","tanh","sigmoid","softmax"]
-    ,kernel_size = [2, 4])
+    ,kernel_size = [4])
 
 r = Run()
 runs = r.run_parameters(parameters)
 
-data_path = "input/train.csv"
-train_set = TensorDataset(data_path)
-
+data_path_train = "input/train.csv"
+train_set = TensorDataset(data_path_train)
 
 
 for run in runs:
@@ -87,3 +86,5 @@ for run in runs:
     
     r.end_run()
     r.save('results')
+    
+    

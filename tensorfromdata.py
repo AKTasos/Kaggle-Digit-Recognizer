@@ -30,7 +30,11 @@ class TensorDataset(Dataset):
         self.n_samples=data.shape[0]
         
     def __getitem__(self, index):
-        return self.x[index], self.y[index]
+        try :
+            return self.x[index], self.y[index]
+        except :
+            return self.x[index]
+        
     
     def __len__(self):
         return self.n_samples
