@@ -15,7 +15,7 @@ from run_options import Run, Epochs
 import torch.optim as optim
 import torch.nn.functional as F
 from networkconv import FullConNetwork
-
+from test_set import submission_file
 os.path.dirname(os.path.abspath(__file__))
 
 
@@ -28,7 +28,7 @@ parameters = dict(
     lr = [0.01]
     ,batch_size = [10]
     ,shuffle = [False]
-    ,epochs = [20]
+    ,epochs = [30]
     ,nb_of_fclayers = [2]
     # ,act_fonction=["relu","glu","tanh","sigmoid","softmax"]
     ,kernel_size = [4])
@@ -86,5 +86,5 @@ for run in runs:
     
     r.end_run()
     r.save('results')
-    
+    submission_file(run,cnnfc)
     

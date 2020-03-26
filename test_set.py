@@ -11,23 +11,25 @@ from torch.utils.data import DataLoader
 import torch
 import numpy as np
 
-def submission_file(cnnfc):
+def submission_file(run,cnnfc):
     data_path_test = "input/test.csv"
     test_set = TensorDataset(data_path_test)
     test_loader = DataLoader(dataset=test_set, batch_size=10, shuffle=False)
     results = []
-    path = "trained_models/Run(lr=0.01, batch_size=10, shuffle=False, epochs=20, nb_of_fclayers=2, kernel_size=4).pth"
-    cnnfc.load_state_dict(torch.load(path))
+    # path = "trained_models/Run(lr=0.01, batch_size=10, shuffle=False, epochs=20, nb_of_fclayers=2, kernel_size=4).pth"
+    # cnnfc.load_state_dict(torch.load(path))
     
     # results = pd.DataFrame(data=([x for x in range(test_set.x.shape[0])],[]), columns=['ImageId', 'Label'])
     
     for batch in test_loader :
-            
-            images = batch
-            
+            a+=1            
+            print(a)
             #runs the batch in the CNN
-            preds = cnnfc(images.float())
+            preds = cnnfc(batch.float()).argmax(dim=1)
             results.append(preds)
-    return results       
             
-results = submission_file(cnnfc)   
+    results = pd.DataFrame(torch.stack(results).view(-1), columns=["Labels"])
+    results.index = results.index+1
+    results.index.name="ImageId"
+    results.to_csv(f'{run}.csv')
+        
