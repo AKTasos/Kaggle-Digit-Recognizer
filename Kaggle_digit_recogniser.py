@@ -29,9 +29,9 @@ parameters = dict(
     ,batch_size = [10]
     ,shuffle = [False]
     ,epochs = [30]
-    ,nb_of_fclayers = [2]
+    ,nb_of_fclayers = [2,4]
     # ,act_fonction=["relu","glu","tanh","sigmoid","softmax"]
-    ,kernel_size = [4])
+    ,kernel_size = [4,8])
 
 r = Run()
 runs = r.run_parameters(parameters)

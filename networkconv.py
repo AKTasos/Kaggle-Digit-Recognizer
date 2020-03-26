@@ -27,7 +27,7 @@ class FullConNetwork(nn.Module):
         # Function.
     # determine number of convolution according to size of image
         self.nb_of_conv = int(math.log(self.img_size)/math.log(2))
-        print(self.nb_of_conv)
+     
     # creating layers
         
         self.cnn = []

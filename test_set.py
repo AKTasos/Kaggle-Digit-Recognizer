@@ -22,8 +22,7 @@ def submission_file(run,cnnfc):
     # results = pd.DataFrame(data=([x for x in range(test_set.x.shape[0])],[]), columns=['ImageId', 'Label'])
     
     for batch in test_loader :
-            a+=1            
-            print(a)
+            
             #runs the batch in the CNN
             preds = cnnfc(batch.float()).argmax(dim=1)
             results.append(preds)
